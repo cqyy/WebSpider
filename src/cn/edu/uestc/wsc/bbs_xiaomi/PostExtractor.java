@@ -50,10 +50,12 @@ public class PostExtractor implements Runnable {
 		int pages =1; 
 		long startTime=System.currentTimeMillis();
 		long endTime=0;
+		long endTime2=0;
 		
 		try{		
 			repliesNumOfFirstPage=this.getRepliesNumOfFirstPage();
 			pages=this.getPages(repliesNum, repliesNumOfFirstPage);
+				
 			//新帖子
 			if(repliesDealed==-1){
 				extractContent();
@@ -66,6 +68,9 @@ public class PostExtractor implements Runnable {
 				}
 			}
 			
+			String log="id:"+post.getId()+"  pages:"+pages+"  repliesNum:"+repliesNum+"  startPage:"+startPage+"  startFloor:"+startFloor;
+			System.out.println(log);
+			
 			//提取回复
 			for(int i=startPage;i<=pages;i++){
 				repliesExtracted+=extractReplies(i,startFloor);
@@ -74,32 +79,33 @@ public class PostExtractor implements Runnable {
 
 			endTime=System.currentTimeMillis();			
 			//将提取时间大于2分钟的帖子信息进行记录
-			if((endTime-startTime)>2*60*1000){
-				String log="post ID: "+post.getId()+"  replies num: "
-						+repliesExtracted+"  time: "+(endTime-startTime);
-				Logger.writeLog(log);
-				}
+			//if((endTime-startTime)>2*60*1000){
+
+			//	}
 		}catch(IOException e){
-			String log="exception in PostExtractor---postID："+post.getId()+" exception inf:"+e.toString();
-			Logger.writeLog(log);
+			//String log="exception in PostExtractor---postID："+post.getId()+" exception inf:"+e.toString();
+			//Logger.writeLog(log);
 		}catch(Exception e){
-			String log="exception in PostExtractor---postID："+post.getId()+" exception inf:"+e.toString();
-			Logger.writeLog(log);
+			//String log="exception in PostExtractor---postID："+post.getId()+" exception inf:"+e.toString();
+			//Logger.writeLog(log);
 		}finally{
 			if(repliesExtracted>0){
 				FileOut.writeLine(post.text());
 				//更新缓存
 				cache.setValue(post.getId(), repliesExtracted+repliesDealed);
+				endTime2=System.currentTimeMillis();
+				String log="ID: "+post.getId()
+						+"   rnum: "+String.format("%1$-8d", repliesExtracted)
+						+"   time: "+String.format("%1$-7d",(endTime-startTime))
+						+"   Wtime: "+String.format("%1$-6d",(endTime2-endTime))
+						+"   AVGTime:  "+String.format("%1$-6.3f",(float)(endTime-startTime)/repliesExtracted);
+				Logger.writeLog(log);
 				post=null;
 			}
 		}
 	}
 	
-	/*@function 提取帖子回复
-	 * @param page:提取的页码
-	 * @param floor:提取的开始楼数,1楼开始
-	 * @return 提取的回复数量
-	 * */
+
 	
 	/*
 	 * @function 获取总页数
@@ -132,6 +138,12 @@ public class PostExtractor implements Runnable {
 		//repliesDealed - ((startPage - 2) * repliesNumOfPage + repliesNumOfFirstPage);
 	}
 	
+	/*
+	 * @function 提取帖子回复
+	 * @param page:提取的页码
+	 * @param floor:提取的开始楼数,1楼开始
+	 * @return 提取的回复数量
+	 * */
 	private int extractReplies(int page,int floor) throws ParseException, IOException{
 		int count=0;
 		String time_regex = "\\d{4}-\\d{1,2}-\\d{1,2}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}";// 匹配时间的正则表达式
@@ -157,7 +169,6 @@ public class PostExtractor implements Runnable {
 					ele_listDiv.children().get(i).select(".t_fsz").text()));
 			count++;
 		}
-	//	System.out.println(count);
 		return count;
 	}
 	

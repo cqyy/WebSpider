@@ -26,7 +26,6 @@ public class PostList{
 			try {
 				wait();  //队列为空，阻塞等待获取队列资源的线程
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

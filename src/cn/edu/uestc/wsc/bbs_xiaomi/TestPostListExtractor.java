@@ -58,7 +58,7 @@ public class TestPostListExtractor extends TestCase{
 										pages[i])));
 				//System.out.println(i);
 				Assert.assertEquals(isLast[i], mt_lp.invoke(ople, doc));
-			} catch (ParseException | IOException e) {
+			} catch (ParseException e) {
 				fail();
 			} catch (ClassNotFoundException e) {
 				fail();
@@ -75,6 +75,9 @@ public class TestPostListExtractor extends TestCase{
 				fail();
 			} catch (InvocationTargetException e) {
 				fail();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

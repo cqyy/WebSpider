@@ -5,11 +5,12 @@ import java.io.IOException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+
+import cn.edu.uestc.Log.Logger;
 /*
  * @function get Html by given url
  * @author yy
@@ -17,22 +18,47 @@ import org.apache.http.util.EntityUtils;
  * @date 2013-10-2*/
 public class HtmlConnect {
 
-	public  String getHtmlByUrl(String url) throws ParseException, IOException{
-		
-		HttpClient client=HttpClientBuilder.create().build();	// 创建httpClient对象	
-		HttpGet get=new HttpGet(url);		        //以Get方式获取
+	private HttpClient client=null;
+	private HttpGet get=null;
+	private HttpResponse response=null;
+	private HttpEntity entity=null;
+	private final int retryTimes=3; //连接失败，重试次数
+	private final int sleepTime=1000; //连接失败睡眠基本时间
+	
+	public HtmlConnect(){
+		 client=HttpClientBuilder.create().build();	// 创建httpClient对象			 
+	}
+	
+	public  String getHtmlByUrl(String url) throws IOException{
+		get=new HttpGet(url);		        //以Get方式获取
 		String html=null;	
-	    try {
-			HttpResponse response = client.execute(get);  //获取response
-			int status=response.getStatusLine().getStatusCode();  //获取状态码
-			if(status==HttpStatus.SC_OK){
-				HttpEntity entity=response.getEntity();       //获取实体
-                if (entity!=null) {  
-                    html = EntityUtils.toString(entity);//获得html源代码  
-                } 
+		int i=1;
+		for(;i<=retryTimes;i++){
+		try {
+				response = client.execute(get);//获取response
+				int status=response.getStatusLine().getStatusCode();    //获取状态码
+				if(status==HttpStatus.SC_OK){					
+					entity=response.getEntity();            //获取实体					
+					if (entity!=null) {  
+						html = EntityUtils.toString(entity);           //获得html源代码  
+						break;     //获取成功，跳出循环。
+					} 
+				}
+				//获取失败，睡眠并重试
+				Thread.sleep(sleepTime*i);
+			} catch (IOException e) {
+				//do nothing
+			} catch (InterruptedException e) {
+				//do nothing
 			}
-		} finally{
-			get.releaseConnection();
+		}
+		get.releaseConnection();
+		
+		//三次重试失败
+		if(i>3){
+			String log="error:connection fail!  url:"+url;
+			Logger.writeLog(log);
+			throw new IOException();
 		}
 		return html;
 	}
