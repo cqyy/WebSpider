@@ -48,9 +48,6 @@ public class PostExtractor implements Runnable {
 		int repliesDealed=cache.getValue(post.getId());;  //上次已经提取的回复数量 -1表示这是一个新帖子
 		//帖子总页数
 		int pages =1; 
-		long startTime=System.currentTimeMillis();
-		long endTime=0;
-		long endTime2=0;
 		
 		try{		
 			repliesNumOfFirstPage=this.getRepliesNumOfFirstPage();
@@ -68,8 +65,9 @@ public class PostExtractor implements Runnable {
 				}
 			}
 			
-			String log="id:"+post.getId()+"  pages:"+pages+"  repliesNum:"+repliesNum+"  startPage:"+startPage+"  startFloor:"+startFloor;
-			System.out.println(log);
+			String log="thread: "+this.hashCode()+"  id:"+post.getId()+"  pages:"+pages+"  startPage:"+startPage+"  startFloor:"+startFloor+"  repliesNum:"+repliesNum;
+			Logger.writeLog(log);
+			//System.out.println(log);
 			
 			//提取回复
 			for(int i=startPage;i<=pages;i++){
@@ -77,29 +75,14 @@ public class PostExtractor implements Runnable {
 				startFloor=1; //开始楼层只对第一个提取页面有效
 			}
 
-			endTime=System.currentTimeMillis();			
-			//将提取时间大于2分钟的帖子信息进行记录
-			//if((endTime-startTime)>2*60*1000){
-
-			//	}
+		//	endTime=System.currentTimeMillis();			
 		}catch(IOException e){
-			//String log="exception in PostExtractor---postID："+post.getId()+" exception inf:"+e.toString();
-			//Logger.writeLog(log);
 		}catch(Exception e){
-			//String log="exception in PostExtractor---postID："+post.getId()+" exception inf:"+e.toString();
-			//Logger.writeLog(log);
 		}finally{
 			if(repliesExtracted>0){
 				FileOut.writeLine(post.text());
 				//更新缓存
 				cache.setValue(post.getId(), repliesExtracted+repliesDealed);
-				endTime2=System.currentTimeMillis();
-				String log="ID: "+post.getId()
-						+"   rnum: "+String.format("%1$-8d", repliesExtracted)
-						+"   time: "+String.format("%1$-7d",(endTime-startTime))
-						+"   Wtime: "+String.format("%1$-6d",(endTime2-endTime))
-						+"   AVGTime:  "+String.format("%1$-6.3f",(float)(endTime-startTime)/repliesExtracted);
-				Logger.writeLog(log);
 				post=null;
 			}
 		}

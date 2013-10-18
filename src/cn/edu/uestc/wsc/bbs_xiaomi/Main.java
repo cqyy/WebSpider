@@ -27,20 +27,20 @@ public class Main {
 		/* 循环检测系统状态 */
 		while (true) {
 			//列表线程检测
-			//System.out.print("--" + th[0].getState().toString());
+			System.out.print("--" + th[0].getState().toString());
 			if(!th[0].isAlive()){
 				th[0]=new Thread(pe);
 				th[0].start();
 				}
 			//帖子爬取线程检测
 			for (int i = 1; i < ThreadNum; i++) {
-			//	System.out.print("--" + th[i].getState().toString());
+				System.out.print("--" + th[i].getState().toString());
 				if(!th[i].isAlive()){
 					th[i]=new Thread(new PostExtractor(list));
 					th[i].start();
 				}
 			}
-			//System.out.println("--size:" + list.size());
+			System.out.println("--size:" + list.size());
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {

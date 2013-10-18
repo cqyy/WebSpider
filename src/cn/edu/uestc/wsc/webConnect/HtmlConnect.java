@@ -9,8 +9,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-
-import cn.edu.uestc.Log.Logger;
 /*
  * @function get Html by given url
  * @author yy
@@ -34,7 +32,7 @@ public class HtmlConnect {
 		String html=null;	
 		int i=1;
 		for(;i<=retryTimes;i++){
-		try {
+			try {
 				response = client.execute(get);//获取response
 				int status=response.getStatusLine().getStatusCode();    //获取状态码
 				if(status==HttpStatus.SC_OK){					
@@ -46,18 +44,19 @@ public class HtmlConnect {
 				}
 				//获取失败，睡眠并重试
 				Thread.sleep(sleepTime*i);
-			} catch (IOException e) {
-				//do nothing
-			} catch (InterruptedException e) {
-				//do nothing
+				} catch (IOException e) {
+					//do nothing
+				} catch (InterruptedException e) {
+					//do nothing
 			}
 		}
 		get.releaseConnection();
 		
 		//三次重试失败
-		if(i>3){
+		if(i>retryTimes){
 			String log="error:connection fail!  url:"+url;
-			Logger.writeLog(log);
+			//Logger.writeLog(log);
+			System.out.println(log);
 			throw new IOException();
 		}
 		return html;

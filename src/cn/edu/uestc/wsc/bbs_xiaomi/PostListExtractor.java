@@ -57,7 +57,7 @@ class PostListExtractor implements Runnable{
 		
 		for(int i=0;i<eles_info.size();i++){
 			String[] authorAndTime=eles_info.get(i).text().split("/");
-			String id=RegexTool.subString(eles_id.get(i).attr("href"),"\\d{5,7}");
+			String id=RegexTool.subString(eles_id.get(i).attr("href"),"\\d{5,8}");
 			
 			Post post=new Post(
 					id,
@@ -105,6 +105,8 @@ class PostListExtractor implements Runnable{
 	/*
 	 * @function 提取主控方法，控制页码*/
 	public void extract(){
+		System.out.println("pages:"+startPage);
+		
 		try {
 			Document doc=Jsoup.parse(
 					connect.getHtmlByUrl(
@@ -117,8 +119,8 @@ class PostListExtractor implements Runnable{
 			this.extractPage(doc);
 			startPage++;
 		} catch (ParseException | IOException e) {
-			String log="exception int PostListExtractor----page:"+startPage+"  exception: "+e.toString();
-			Logger.writeLog(log);
+			//String log="exception int PostListExtractor----page:"+startPage+"  exception: "+e.toString();
+			//Logger.writeLog(log);
 		}
 	};
 	@Override
@@ -128,7 +130,7 @@ class PostListExtractor implements Runnable{
 				this.extract();
 			}
 			try {			
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {
