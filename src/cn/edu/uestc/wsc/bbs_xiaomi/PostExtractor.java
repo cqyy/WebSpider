@@ -117,8 +117,6 @@ public class PostExtractor implements Runnable {
 	 * @param repliesNumOfFirstPage:第一页的回复数量*/
 	private int getStartFloor(int repliesNum,int repliesNumOfFirstPage){
 		return (repliesNum-repliesNumOfFirstPage)%repliesNumOfPage+1;
-	
-		//repliesDealed - ((startPage - 2) * repliesNumOfPage + repliesNumOfFirstPage);
 	}
 	
 	/*
