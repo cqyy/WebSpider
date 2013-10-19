@@ -22,7 +22,7 @@ public class FileOut {
 		if(out==null){
 			try {
 				File file=new File(basePath);
-				if(!file.exists()){	file.mkdir();}
+				if(!file.exists()){	file.mkdirs();}
 				
 				file=new File(basePath+filename.getFileName()+".txt");
 				

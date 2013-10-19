@@ -25,7 +25,7 @@ public class Logger {
 		}
 		
 		File file=new File(logPath);		
-		if(!file.exists()){file.mkdir();}
+		if(!file.exists()){file.mkdirs();}
 		
 		file=new File(logPath+fileName);
 		FileWriter out=null;

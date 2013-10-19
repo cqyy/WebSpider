@@ -8,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import cn.edu.uestc.Log.Logger;
 import cn.edu.uestc.RegexTool.RegexTool;
 import cn.edu.uestc.contentContainer.Post;
 import cn.edu.uestc.contentContainer.PostList;
@@ -105,7 +104,7 @@ class PostListExtractor implements Runnable{
 	/*
 	 * @function 提取主控方法，控制页码*/
 	public void extract(){
-		System.out.println("pages:"+startPage);
+		//System.out.println("pages:"+startPage);
 		
 		try {
 			Document doc=Jsoup.parse(
