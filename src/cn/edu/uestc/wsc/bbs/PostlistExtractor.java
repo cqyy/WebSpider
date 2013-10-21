@@ -19,6 +19,7 @@ public abstract class PostlistExtractor implements Runnable{
 		_list=list;
 		_connect=new HtmlConnect();
 	};
+
 	
 
 	/*
@@ -41,15 +42,9 @@ public abstract class PostlistExtractor implements Runnable{
 		return false;
 	};
 
-	/*
-	 * @function 判断是否为列表页面的最后一页
-	 * @param doc:页面DOM对象
-	 * return:true 该页面是最后一页，false 不是最后一页
-	 * */
-	protected abstract boolean isLastPage(Document doc);
 	
 	/*
 	 * @function 提取主控方法，控制页码*/
-	public abstract void extract();
+	public abstract void extract(int block,int page);
 	
 }

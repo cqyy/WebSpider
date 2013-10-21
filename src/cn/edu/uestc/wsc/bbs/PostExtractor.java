@@ -7,14 +7,14 @@ import cn.edu.uestc.wsc.webConnect.HtmlConnect;
 
 public abstract class PostExtractor {
 	protected PostList _list=null;
-	protected HtmlConnect _htmlConnect;
+	protected HtmlConnect _con;
 	protected Cache _cache=null;
 	protected int _repliesNumOfPage; // 除了第一页之外，每页显示的评论数量
 	protected Post _post = null;
 	
 	public PostExtractor(PostList list){
 		_list=list;
-		_htmlConnect=new HtmlConnect();
+		_con=new HtmlConnect();
 	}
 	
 	/*
@@ -35,7 +35,7 @@ public abstract class PostExtractor {
 	/* 
 	 * @function 提取帖子内容
 	 * */
-	protected abstract void extractContent() ;
+	protected abstract void extractContent () ;
 	
 	/*
 	 * @function 从list中获取一个post
