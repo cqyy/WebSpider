@@ -10,9 +10,9 @@ import cn.edu.uestc.contentContainer.PostList;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class TestPostExtractor extends TestCase {
+public class PostExtractorTest extends TestCase {
 	
-	public TestPostExtractor(String method){
+	public PostExtractorTest(String method){
 		super(method);
 	}
 	

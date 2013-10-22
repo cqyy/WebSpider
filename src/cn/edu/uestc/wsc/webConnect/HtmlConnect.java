@@ -7,7 +7,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 /*
  * @function get Html by given url
@@ -24,7 +23,8 @@ public class HtmlConnect {
 	private final int sleepTime=1000; //连接失败睡眠基本时间
 	
 	public HtmlConnect(){
-		 client=HttpClientBuilder.create().build();	// 创建httpClient对象			 
+		 //client=HttpClientBuilder.create().build();	// 创建httpClient对象			 
+		client=MyHttpClient.getInstance();
 	}
 	
 	public  String getHtmlByUrl(String url) throws IOException{

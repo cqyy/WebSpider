@@ -14,6 +14,10 @@ public class FileOut {
 	private static int count=0;
 
 	
+	public static void setSavePath(String path){
+		basePath=path;
+		}
+	
 	public static synchronized void writeLine(String content) {
 		if(count==size){
 			count=0;

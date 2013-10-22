@@ -18,7 +18,7 @@ import junit.framework.*;
 /*
  * @function
  * jUnit测试，测试PostistExtractor*/
-public class TestPostListExtractor extends TestCase{
+public class PostListExtractorTest extends TestCase{
 	
 	public void testIsNew(){
 		PostList list=new PostList();
