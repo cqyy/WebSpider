@@ -28,6 +28,9 @@ public class PostListExtractor extends AbstractPostlistExtractor {
 				_connect.getHtmlByUrl(
 						_urlMaker.createPostlistURL(blockId, 1)));
 		Element ele=doc.select(".pg").first();
+		if(ele==null){
+			return 1;
+		}
 		pages=Integer.valueOf(ele.children().get(ele.children().size()-2).text().replace("...", "").trim());
 		
 		if(pages>1000){

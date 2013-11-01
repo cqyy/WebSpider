@@ -36,8 +36,8 @@ public abstract class AbstractPostlistExtractor implements Runnable{
 				_block=_blockManager.next();
 				_pages=this.getPages(_block);
 				_startPage=1;
-				System.out.println("extract block: "+_block);
 				while(_startPage<=_pages){
+					System.out.println("extract block: "+_block+"  pages: "+_startPage);
 					this.extract(_block,_startPage);
 					_startPage++;
 					/*控制列表长度，使其不至于太长*/
