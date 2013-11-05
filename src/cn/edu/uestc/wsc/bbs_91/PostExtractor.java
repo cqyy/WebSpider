@@ -1,4 +1,4 @@
-package cn.edu.uestc.wsc.bbs_anzhi;
+package cn.edu.uestc.wsc.bbs_91;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import org.jsoup.nodes.Element;
 
 import cn.edu.uestc.contentContainer.Comment;
 import cn.edu.uestc.contentContainer.PostList;
-import cn.edu.uestc.wsc.Cache.BBSanzhiCache;
+import cn.edu.uestc.wsc.Cache.BBS91Cache;
 import cn.edu.uestc.wsc.bbs.AbstractPostExtractor;
 
 public class PostExtractor extends AbstractPostExtractor {
@@ -19,14 +19,13 @@ public class PostExtractor extends AbstractPostExtractor {
 
 	@Override
 	protected void initCache() {
-		super._cache = new BBSanzhiCache();
+		super._cache = new BBS91Cache();
 
 	}
 
 	@Override
 	protected void initURLMaker() {
-		super._urlMaker = new URLMakeranzhi();
-
+		super._urlMaker=new URLMaker91();
 	}
 
 	@Override
@@ -58,16 +57,19 @@ public class PostExtractor extends AbstractPostExtractor {
 			ele = rp_div.children().get(i);
 			String content = "";
 			String time = "";
-
-			String author = ele.select(".xw1").first().text();
-			if (ele.select(".t_f").first() != null) {
-				content = ele.select(".t_f").first().text();
+            /*作者*/
+			String author = ele.select("#vwuser>h3>a").first().text();
+			
+			/*回复内容*/
+			if (ele.select(".t_fsz").first() != null) {
+				content = ele.select(".t_fsz").first().text();
 			}
-
-			if (ele.select(".pti div em span").first() != null) {
-				time = ele.select(".pti div em span").first().attr("title");
+			
+			/*回帖时间*/
+			if (ele.select(".authi em span").first() != null) {
+				time = ele.select(".authi em span").first().attr("title");
 			} else {
-				time = ele.select(".pti div em").first().text()
+				time = ele.select(".authi em").first().text()
 						.replace("发表于", "").trim();
 			}
 
@@ -91,12 +93,13 @@ public class PostExtractor extends AbstractPostExtractor {
 			_post.setContent(ele.select(".t_fsz").first().text());
 		}
 		/* 提取发帖时间 */
-		ele = ele.select(".authi>div> em").first();
+		ele = ele.select(".authi> em").first();
 		if (ele.select("span").first() != null) {
 			_post.setTime(ele.select("span").first().attr("title"));
 		} else {
 			_post.setTime(ele.text().replace("发表于", "").trim());
 		}
+
 	}
 
 }

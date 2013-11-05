@@ -1,16 +1,16 @@
-package cn.edu.uestc.wsc.bbs_anzhi;
+package cn.edu.uestc.wsc.bbs_91;
 
 import cn.edu.uestc.contentContainer.PostList;
 import cn.edu.uestc.wsc.FileOut.FileOut;
 
-public class Main_anzhi {
+public class Main_91 {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		final int ThreadNum = 6;
-		FileOut.setSavePath("../AnzhiBBS/");
+		FileOut.setSavePath("../91BBS/");
 		PostList list = new PostList();
 		PostListExtractor pe = new PostListExtractor(list);
 
@@ -45,6 +45,7 @@ public class Main_anzhi {
 			} catch (InterruptedException e) {
 			}
 		}
+
 	}
 
 }

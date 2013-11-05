@@ -22,18 +22,6 @@ public class PostListExtractor extends AbstractPostlistExtractor {
 		super(list);
 	}
 
-	/*@Override
-	public void extract(int block,int page) {
-		try {
-			Document doc=Jsoup.parse(
-					_connect.getHtmlByUrl(
-							URLMaker.createPostlistUrl(block, page)));
-			extractList(doc);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}*/
 
 	
 	@Override

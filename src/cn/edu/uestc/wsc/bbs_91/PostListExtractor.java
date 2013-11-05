@@ -1,4 +1,4 @@
-package cn.edu.uestc.wsc.bbs_anzhi;
+package cn.edu.uestc.wsc.bbs_91;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
 import cn.edu.uestc.RegexTool.RegexTool;
 import cn.edu.uestc.contentContainer.Post;
 import cn.edu.uestc.contentContainer.PostList;
-import cn.edu.uestc.wsc.Cache.BBSanzhiCache;
+import cn.edu.uestc.wsc.Cache.BBS91Cache;
 import cn.edu.uestc.wsc.bbs.AbstractPostlistExtractor;
 
 public class PostListExtractor extends AbstractPostlistExtractor {
@@ -21,15 +21,17 @@ public class PostListExtractor extends AbstractPostlistExtractor {
 
 	@Override
 	protected int getPages(int blockId) throws IOException {
-		Document doc = Jsoup.parse(_connect.getHtmlByUrl(_urlMaker
-				.createPostlistURL(blockId, 1)));
-		Element ele = doc.select(".pg").first();
-		// 只有一页，没有页码导航
-		if (ele == null) {
+		Document doc=Jsoup.parse(
+				_connect.getHtmlByUrl(
+						_urlMaker.createPostlistURL(blockId, 1)));
+		Element ele=doc.select(".pg").first();
+		/*没有页码栏，页码只有一页*/
+		if(ele==null){
 			return 1;
 		}
-		ele = ele.children().get(ele.children().size() - 2);
-		return Integer.parseInt(ele.text().replace("...", "").trim());
+		String page=ele.children().get(ele.children().size()-2).text();
+		page=RegexTool.subString(page, "\\d{1,5}");
+		return Integer.parseInt(page);
 	}
 
 	@Override
@@ -48,16 +50,16 @@ public class PostListExtractor extends AbstractPostlistExtractor {
 		for (int i = 0; i < eles.size(); i++) {
 			ele = eles.get(i);
 			id = ele.attr("id");
-
+			/*无效贴子，可能是公告*/
 			if (id == null) {
 				continue;
-			} // 无效贴子，可能是公告
+			} 
 
 			id = RegexTool.subString(id, regex_id);
-
+			 // 无效帖子 ，可能是分隔栏
 			if (id == null) {
 				continue;
-			} // 无效帖子 ，可能是分隔栏
+			}
 
 			title = ele.select(".xst").first().text();
 			author = ele.select(".by cite").first().text();
@@ -77,17 +79,17 @@ public class PostListExtractor extends AbstractPostlistExtractor {
 
 	@Override
 	protected void initCache() {
-		super._cache = new BBSanzhiCache();
+		super._cache=new BBS91Cache();
 	}
 
 	@Override
 	protected void initBlockManager() {
-		super._blockManager = new BlockManageranzhi();
+		super._blockManager=new BlockManager91();
 	}
 
 	@Override
 	protected void initURLMaker() {
-		super._urlMaker = new URLMakeranzhi();
+		super._urlMaker=new URLMaker91();
 	}
 
 }

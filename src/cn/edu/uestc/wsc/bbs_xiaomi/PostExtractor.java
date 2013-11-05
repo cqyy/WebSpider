@@ -55,8 +55,8 @@ public class PostExtractor implements Runnable {
 				
 			//新帖子
 			if(repliesDealed==-1){
-				extractContent();
 				repliesDealed=0;
+				extractContent();
 			}else{
 				post.setNotNew();
 				//初始开始提取的页码和开始的楼层
